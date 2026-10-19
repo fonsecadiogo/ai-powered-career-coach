@@ -68,21 +68,32 @@ class MockInterviewTests(unittest.TestCase):
             client=SimpleNamespace(responses=self.responses)
         )
 
-    def test_full_ten_question_interview_and_weighted_score(self):
+    def test_full_fifteen_question_interview_and_weighted_score(self):
         session = self.engine.start_interview("Junior AI Engineer", "Python and ML")
         self.assertEqual(session.status, "in_progress")
         for i in range(QUESTION_LIMIT):
             session = self.engine.submit_answer(session, f"Detailed answer {i+1}")
         self.assertEqual(session.status, "ready_for_feedback")
-        self.assertEqual(len(session.turns), 10)
+        self.assertEqual(len(session.turns), 15)
         session, report = self.engine.finish_interview(session)
         self.assertEqual(session.status, "completed")
         self.assertEqual(report.overall_score, 72)  # 24 + 15 + 14 + 13.5 + 5 = 71.5 -> 72
-        self.assertEqual(report.answered_questions, 10)
-        self.assertEqual(len(self.responses.calls), 11)
+        self.assertEqual(report.answered_questions, 15)
+        self.assertEqual(len(self.responses.calls), 16)
         self.assertEqual(self.responses.calls[1]["previous_response_id"], "resp_test_1")
         self.assertIn("instructions", self.responses.calls[1])
         self.assertNotIn("previous_response_id", self.responses.calls[-1])
+
+    def test_fifteen_question_competency_distribution(self):
+        from collections import Counter
+        self.assertEqual(QUESTION_LIMIT, 15)
+        self.assertEqual(Counter(QUESTION_COMPETENCIES), {
+            "practical_experience": 3,
+            "technical_competence": 5,
+            "problem_solving": 3,
+            "communication": 2,
+            "role_fit": 2,
+        })
 
     def test_early_finish_uses_only_answered_questions(self):
         session = self.engine.start_interview("Junior AI Engineer")
@@ -120,7 +131,7 @@ class MockInterviewTests(unittest.TestCase):
             self.engine.submit_answer(session, "a" * 5_001)
         self.assertEqual(len(self.responses.calls), 1)
 
-    def test_competency_plan_all_ten_questions(self):
+    def test_competency_plan_all_fifteen_questions(self):
         import json
         session = self.engine.start_interview("Junior AI Engineer", "Python NLP FastAPI")
         for n in range(QUESTION_LIMIT - 1):
@@ -132,7 +143,7 @@ class MockInterviewTests(unittest.TestCase):
         for n, call in enumerate(self.responses.calls):
             payload = json.loads(call["input"])
             self.assertEqual(payload["required_competency"], QUESTION_COMPETENCIES[n])
-            self.assertEqual(payload["total_questions"], 10)
+            self.assertEqual(payload["total_questions"], 15)
 
     def test_fabricated_evidence_quote_rejected(self):
         session = self.engine.start_interview("Junior AI Engineer")

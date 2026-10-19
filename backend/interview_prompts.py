@@ -15,7 +15,7 @@ Rules:
 - Following questions: respond to what the candidate actually said;
   probe vague claims, reasoning, trade-offs, evidence and decisions.
 - IMPORTANT: output competency MUST exactly equal payload.required_competency.
-  The application allocates competencies across all 10 questions, so you MUST
+  The application allocates competencies across all 15 questions, so you MUST
   respect that plan even when the previous answer contains an error.
 - Use previous_questions to avoid repeated topics. A follow-up may probe the
   previous answer only when relevant to the required competency.

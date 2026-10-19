@@ -30,14 +30,17 @@ from .interview_schemas import (
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(PROJECT_ROOT / ".env")
 
-QUESTION_LIMIT = 10
-# Competency coverage plan: allow technical depth without dominating the interview.
+QUESTION_LIMIT = 15
+# Fifteen-question competency plan; adaptive questions must respect assigned competencies.
 QUESTION_COMPETENCIES = (
     "practical_experience", "technical_competence", "technical_competence",
     "problem_solving", "technical_competence", "problem_solving",
     "practical_experience", "communication", "role_fit",
-    "technical_competence",
+    "technical_competence", "problem_solving", "practical_experience",
+    "technical_competence", "communication", "role_fit",
 )
+assert len(QUESTION_COMPETENCIES) == QUESTION_LIMIT
+
 MAX_ROLE_CHARS = 120
 MAX_JOB_DESCRIPTION_CHARS = 5_000
 MAX_ANSWER_CHARS = 5_000
