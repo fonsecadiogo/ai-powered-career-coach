@@ -1,12 +1,18 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from .interview import InterviewEngine, InterviewError
 from .interview_schemas import InterviewSession, InterviewEvaluation
-from fastapi.middleware.cors import CORSMiddleware
+from .cv_reviewer import router as cv_router
+
 
 
 app = FastAPI(title="AI-Powered Career Coach")
+
+
+app.include_router(cv_router)
+
 
 app.add_middleware(
     CORSMiddleware,
