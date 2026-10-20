@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import HeroSection from "./components/HeroSection";
 import ModeTabs from "./components/ModeTabs";
 import MockInterview from "./components/MockInterview";
-import CVReviewerPlaceholder from "./components/CVReviewerPlaceholder";
+import CVReviewer from "./components/CVReviewer";
 
 import "./App.css";
 
@@ -27,7 +27,7 @@ function App() {
           {activeModule === "interview" ? (
             <MockInterview />
           ) : (
-            <CVReviewerPlaceholder />
+            <CVReviewer />
           )}
         </main>
       </div>

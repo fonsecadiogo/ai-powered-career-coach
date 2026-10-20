@@ -634,3 +634,211 @@
     padding: 16px;
   }
 }
+
+
+/* =========================================
+   CV REVIEWER — PREMIUM UI
+========================================= */
+
+.cv-reviewer {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cv-reviewer h2 {
+  margin: 0 0 12px;
+  color: #202e49;
+  font-size: 28px;
+}
+
+.cv-reviewer > p {
+  margin: 0 0 30px;
+  color: #77849b;
+  font-size: 15px;
+}
+
+/* CV FORM */
+
+.cv-reviewer form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cv-reviewer form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cv-reviewer label {
+  color: #34425c;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cv-reviewer input[type="text"],
+.cv-reviewer textarea {
+  width: 100%;
+  padding: 15px 18px;
+  border: 1px solid #dce5f2;
+  border-radius: 13px;
+  background: #f9fbff;
+  color: #243047;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.cv-reviewer input[type="text"]:focus,
+.cv-reviewer textarea:focus {
+  border-color: #7e9aff;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(88, 119, 237, 0.1);
+}
+
+.cv-reviewer textarea {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* PDF UPLOAD */
+
+.cv-reviewer input[type="file"] {
+  width: 100%;
+  padding: 20px;
+  border: 2px dashed #cbd8f5;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #f9fbff, #f0f6ff);
+  color: #66758e;
+  font-size: 13px;
+}
+
+.cv-reviewer input[type="file"]::file-selector-button {
+  margin-right: 15px;
+  padding: 11px 17px;
+  border: 1px solid #cbd8f5;
+  border-radius: 10px;
+  background: white;
+  color: #5877ed;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cv-reviewer input[type="file"]:focus-visible {
+  outline: 3px solid rgba(88, 119, 237, 0.3);
+  outline-offset: 3px;
+}
+
+/* ANALYZE BUTTON */
+
+.cv-reviewer button[type="submit"] {
+  align-self: flex-start;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #5877ed, #6c9cf5);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(88, 119, 237, 0.18);
+  transition: 0.2s ease;
+}
+
+.cv-reviewer button[type="submit"]:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(88, 119, 237, 0.25);
+}
+
+.cv-reviewer button[type="submit"]:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* CV ANALYSIS RESULTS */
+
+.cv-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #e4eaf5;
+}
+
+.cv-results h3 {
+  margin: 0 0 10px;
+  color: #202e49;
+  font-size: 26px;
+}
+
+.cv-results > p {
+  align-self: flex-start;
+  padding: 15px 22px;
+  border-radius: 13px;
+  background: #e9eeff;
+  color: #34425c;
+  font-size: 17px;
+}
+
+.cv-results > p strong {
+  color: #5877ed;
+}
+
+.cv-results h4 {
+  margin: 20px 0 0;
+  color: #34425c;
+  font-size: 17px;
+}
+
+.cv-results ul {
+  margin: 0;
+  padding: 20px 25px 20px 40px;
+  border: 1px solid #e4eaf5;
+  border-radius: 15px;
+  background: #f9fbff;
+}
+
+.cv-results li {
+  margin-bottom: 10px;
+  color: #34425c;
+  line-height: 1.6;
+}
+
+/* VALIDATION ERRORS */
+
+.cv-reviewer .cv-error {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #b42318;
+  font-size: 14px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 520px) {
+  .cv-reviewer h2 {
+    font-size: 23px;
+  }
+
+  .cv-reviewer button[type="submit"] {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .cv-reviewer input[type="file"] {
+    padding: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-reviewer button[type="submit"],
+  .cv-reviewer input[type="text"],
+  .cv-reviewer textarea {
+    transition: none;
+  }
+}
