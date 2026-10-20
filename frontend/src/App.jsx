@@ -1,6 +1,11 @@
-
 import { useState } from "react";
+
+import Header from "./components/Header";
+import HeroSection from "./components/HeroSection";
+import ModeTabs from "./components/ModeTabs";
 import MockInterview from "./components/MockInterview";
+import CVReviewerPlaceholder from "./components/CVReviewerPlaceholder";
+
 import "./App.css";
 
 function App() {
@@ -8,39 +13,28 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <h1>AI-Powered Career Coach</h1>
-        <p>Your AI-powered career development assistant</p>
-      </header>
+      <Header />
 
-      <nav aria-label="Main navigation">
-        <button
-          type="button"
-          onClick={() => setActiveModule("interview")}
-          aria-pressed={activeModule === "interview"}
-        >
-          Mock Interview
-        </button>
+      <div className="app-container">
+        <HeroSection compact={false} />
 
-        <button
-          type="button"
-          onClick={() => setActiveModule("cv")}
-          aria-pressed={activeModule === "cv"}
-        >
-          CV Reviewer
-        </button>
-      </nav>
+        <ModeTabs
+          activeModule={activeModule}
+          onChange={setActiveModule}
+        />
 
-      <main>
-        {activeModule === "interview" ? (
-          <MockInterview />
-        ) : (
-          <section>
-            <h2>CV Reviewer</h2>
-            <p>This feature is currently under development.</p>
-          </section>
-        )}
-      </main>
+        <main className="app-main">
+          {activeModule === "interview" ? (
+            <MockInterview />
+          ) : (
+            <CVReviewerPlaceholder />
+          )}
+        </main>
+      </div>
+
+      <footer className="app-footer">
+        Built with React, FastAPI and OpenAI
+      </footer>
     </div>
   );
 }
