@@ -1,87 +1,99 @@
 # Deployment Readiness Audit
 
-**Project:** AI-Powered Career Coach
-**Audit branch:** `docs/deployment-readiness`
-**Audited integration revision:** `e79d060da0101bf0f2a8c00c999160bd7196d800`
-**Scope:** Caio's local documentation, configuration, dependency, and deployment-readiness responsibilities.
+**Project:** AI-Powered Career Coach (Atena)
+**Branch:** `docs/deployment-readiness`
+**Current audited HEAD:** `76357cc` (local merge of `origin/integration`)
+**Scope:** Caio's documentation, configuration review, deterministic validation, and deployment handoff.
 
 ## A. Executive summary
 
-The project is ready for local development and deterministic validation after the configuration portability fix below. It is **not yet deployment-ready**: no deployment configuration exists, the backend CORS allow-list permits only local Vite origins, runtime versions are not declared, and public frontend/backend URLs must be chosen by the deployment owner.
+The integrated MVP now exposes Mock Interview, CV Reviewer, Job Discovery, and Job-Fit Analysis. The local documentation has been updated to match the implementation at `76357cc`. The deterministic backend suite and frontend checks were independently executed without making paid OpenAI requests.
 
-No deployment was attempted. No API keys were read, printed, or added to tracked files.
+The project is suitable for local development and review, but it is not production-ready. Hosting, production CORS, runtime selection, HTTPS, secret provisioning, upstream jobs-provider reliability, and deployment monitoring remain open responsibilities.
 
-## B. Files changed
+## B. Audit history and integration update
 
-| File | Change | Reason |
-| --- | --- | --- |
-| `backend/cv_reviewer.py` | Replaced a workspace-relative `.env` lookup with a project-root optional `.env` lookup. | Makes local configuration portable while preserving host-provided environment variables. |
-| `.env.example` | Added a safe backend configuration template. | Documents the required server-side secret and optional Mock Interview model setting. |
-| `frontend/.env.example` | Added a safe frontend configuration template. | Documents the public build-time API URL without exposing secrets. |
-| `README.md` | Replaced the minimal README with reproducible setup, usage, validation, and deployment guidance. | Gives contributors and reviewers an accurate project guide. |
-| `docs/DEPLOYMENT_READINESS_AUDIT.md` | Added this audit. | Records findings, validation, blockers, and handoff actions. |
+### Original documentation audit
 
-## C. Configuration findings
+The first audit was based on `e79d060` (`Fix legacy CV tests and pytest collection`). At that point, the deterministic CV and Mock Interview suite passed **26 tests**. It identified the CV Reviewer's machine-specific `.env` lookup and changed it to an optional project-root `.env`, while leaving application behavior and shared integration untouched.
 
-- Mock Interview loads an optional root `.env`, then reads `OPENAI_MODEL`, defaulting to `gpt-4.1-mini`. Its OpenAI client is created lazily, so offline tests do not require a key.
-- CV Reviewer previously used `Path(__file__).resolve().parents[3]` for `.env`, assuming this project lived under an `ironhack-workspace` directory. It now loads the optional root `.env`, matching Mock Interview. `python-dotenv` does not override process environment variables by default, so hosting-provider secrets take precedence.
-- CV Reviewer initializes `OpenAI()` and uses the hard-coded model `gpt-4o-mini`; Mock Interview is instead configurable through `OPENAI_MODEL`. No model behavior changed.
-- The frontend uses `VITE_API_BASE_URL`, falling back to `http://127.0.0.1:8000`. Vite variables are public build-time values; `OPENAI_API_KEY` must never have a `VITE_` prefix.
-- `.gitignore` excludes `.env` and `.env.*` while explicitly allowing `.env.example`.
+### New integrated features
 
-The change to `cv_reviewer.py` does not alter request fields, response schemas, endpoints, OpenAI prompts, or model selection.
+Diogo's `6e22786` (`Add Job Discovery and Job-Fit Analysis`) added the jobs and job-fit backend routes, schemas, tests, and React modules. The local branch then integrated that revision through `76357cc` (`Merge origin/integration into docs/deployment-readiness`). This audit updates the README and findings for that four-feature state; it does not modify Diogo's feature code.
 
-## D. Dependency findings
+## C. Files changed in this local continuation
 
-`backend/requirements.txt` declares FastAPI, Uvicorn, OpenAI, pypdf, python-dotenv, and python-multipart for production. It also contains test tooling: pytest and httpx (used by FastAPI/Starlette's `TestClient`). No dependency changes were needed.
+| File | Reason |
+| --- | --- |
+| `README.md` | Documents all four implemented modules, actual API contracts, setup, validation, and limitations. |
+| `docs/DEPLOYMENT_READINESS_AUDIT.md` | Preserves the original audit history and records the integrated-feature review and current handoff. |
 
-- Pydantic and Starlette are imported directly but arrive through the pinned FastAPI dependency chain. They were installed in the validated environment; redundant pins were not added.
-- `pytest` and `httpx` are development/test dependencies mixed into runtime requirements. Splitting production and development requirements is a future cleanup, not a current blocker.
-- The validated environment reported Python 3.12.14 and passed `pip check`. The repository does not declare a Python version policy or Node `engines` field.
-- The local environment contained `python-dotenv` 1.2.4 while the requirements file pins 1.2.2. `pip check` reported no conflict; no upgrade was made during this audit.
+No backend implementation, React component, test, dependency, environment-example, deployment, or GitHub file was modified in this continuation.
 
-## E. Validation results
+## D. Inspected configuration and implementation findings
 
-| Command | Result | Notes |
-| --- | --- | --- |
-| `python -m pytest -q backend/test_review_cv_api.py tests/test_interview.py` | **22 passed** | Offline tests only; no OpenAI request occurred. |
-| `python -m pytest -q backend/test_review_cv_api.py backend/test_cv_processing.py backend/test_pdf_processing.py tests/test_interview.py` | **26 passed** | Current deterministic suite matches the reported test count. |
-| `cd frontend && npm run lint` | **Passed** | Checks the existing React source. |
-| `cd frontend && npm run build` | **Passed** | Vite production build completed; generated `dist/` remains ignored. |
-| Environment portability smoke check | **Passed** | Verified host-supplied `OPENAI_API_KEY` and `OPENAI_MODEL` are retained on module import; no API request occurred. |
-| `git diff --check` | **Passed** | Final diff has no whitespace errors. |
+### Environment variables
 
-`backend/test_cv_ai.py` is intentionally excluded: when directly executed, it invokes a real OpenAI request. `backend/test_cv_schema_manual.py` is a manual script with no pytest test function and is not collected by the deterministic suite.
+- Mock Interview loads the optional project-root `.env` and reads `OPENAI_MODEL`, defaulting to `gpt-4.1-mini`.
+- CV Reviewer loads the optional project-root `.env` and currently uses `gpt-4o-mini` directly.
+- Job-Fit Analysis loads the optional project-root `.env` and currently uses `gpt-4o-mini` directly.
+- Job Discovery has no secret or application-specific environment variable; it calls the Himalayas endpoint directly.
+- `python-dotenv` does not override existing process variables by default, so host-provided values take precedence over a local file.
+- `VITE_API_BASE_URL` is public build-time configuration and defaults to `http://127.0.0.1:8000`. No frontend secret exposure was found.
+- `.gitignore` excludes real `.env` files while allowing the example files.
 
-## F. Remaining blockers
+No new critical configuration defect was found within Caio's authorized scope, so no application code was changed.
 
-### Caio review or approval
+### Dependencies
 
-- Review the local diff and decide whether to commit the documentation/configuration contribution.
-- Confirm the intended Python and Node runtime versions for the deployment target.
-- Decide whether to keep the split model behavior (`OPENAI_MODEL` for Mock Interview and a hard-coded CV Reviewer model) or make it configurable in a separately tested change.
+`backend/requirements.txt` includes FastAPI, Uvicorn, OpenAI, pypdf, python-dotenv, python-multipart, pytest, and httpx. The new Job Discovery code uses the already-declared `httpx`; Job-Fit reuses existing OpenAI, PDF, and multipart dependencies. No dependency change was necessary.
 
-### Requires coordination with Diogo
+The requirements file mixes runtime and test dependencies, and the repository does not declare Python or Node runtime versions. These are deployment-policy follow-ups, not reasons to alter the current MVP dependencies.
 
-- Update `backend/app.py` CORS origins when the deployed frontend URL is known. This shared integration file was intentionally not changed.
-- Coordinate any change to shared API paths, UI modules, or Job Discovery/Job-Fit work; none was changed in this audit.
+### Job Discovery contract
 
-### Deployment owner responsibilities
+`GET /jobs/search` accepts required query `q` (2–120 characters) and optional `country`. It calls `https://himalayas.app/jobs/api/search` with `q`, `sort=recent`, and `country` when supplied. It normalizes provider records to title, company, summary, seniority, employment type, locations, publication date, description, and application URL, then ranks by title-term matches. Upstream HTTP failures become 502. The tests mock `httpx.get`, so they validate mapping/ranking/error behavior but not live availability, provider uptime, or schema stability.
 
-- Provision `OPENAI_API_KEY` as a backend-host secret.
-- Configure the final `VITE_API_BASE_URL` at frontend build time.
-- Select hosting, HTTPS, production process startup, upload/request-body limits, and deployment automation.
-- Validate the application against the selected production platform before release.
+### Job-Fit contract
 
-## G. Git status
+`POST /job-fit` accepts multipart form data with required `job_description` (maximum 12,000 characters) and exactly one of `cv_text` (maximum 20,000 characters) or `cv_file` (PDF, maximum 5 MiB). Invalid or ambiguous input is 400; oversized PDFs are 413; extraction/provider failures are returned as 400/502 as applicable. The response contains a bounded score, summary, matching skills, missing skills, strengths, and recommendations. The endpoint calls OpenAI and returns an estimate, not an employment guarantee. Tests patch the analyzer and exercise the validation/API contract without provider calls.
 
-The audit began from clean checkout `test/final-integration`. After fetching, `origin/integration` advanced from `3c805e4` to `e79d060`; the dedicated local branch `docs/deployment-readiness` was created from `origin/integration` at `e79d060`.
+## E. Independently executed validation
 
-Changes remain local and uncommitted. Nothing was pushed, merged, submitted as a pull request, or deployed.
+The following explicit commands were run with the existing environment and no package installation or upgrade:
 
-## H. Suggested next actions
+| Check | Result |
+| --- | --- |
+| `python -m pytest -q backend/test_review_cv_api.py backend/test_cv_processing.py backend/test_pdf_processing.py tests/test_interview.py tests/test_jobs.py tests/test_job_fit.py` | **34 passed** |
+| `cd frontend && npm run lint` | **Passed** |
+| `cd frontend && npm run build` | **Passed**; Vite production bundle generated successfully |
+| `python -m pip check` | **Passed**; no broken requirements |
+| `git diff --check` | **Passed** after the documentation edits |
+| Offline environment/API-contract checks | **Passed**; no live OpenAI or jobs-provider call made |
 
-1. Review the final local diff and validation output.
-2. Coordinate the production frontend URL and CORS change with Diogo.
-3. Select host runtime versions and build/deploy commands, then test a staging deployment with backend secrets configured.
-4. After approval, commit the scoped documentation/configuration files on this branch and open a pull request through the agreed team workflow.
+`backend/test_cv_ai.py` and other manual OpenAI integration scripts were intentionally not executed. The Job Discovery tests mock the external provider, so the 34 passing tests do not establish real-time listing availability.
+
+## F. Production deployment considerations
+
+These items remain open and were documented without implementing them:
+
+- **CORS:** `backend/app.py` allows only local Vite origins on ports 5173–5175. Add the final hosted frontend origin through coordination with Diogo before release.
+- **Secrets:** provision `OPENAI_API_KEY` in the backend host environment; never put it in a Vite variable or tracked file.
+- **Frontend API URL:** set `VITE_API_BASE_URL` to the final HTTPS backend origin before the production frontend build.
+- **Runtimes:** select and test supported Python and Node versions; neither is declared by the repository.
+- **Hosting and transport:** choose backend/frontend hosting, production process startup, HTTPS, and observability. No deployment URL is claimed here.
+- **Uploads:** configure the total reverse-proxy/request-body limit above 5 MiB so Job-Fit and CV Reviewer can accept a PDF of up to 5 MiB plus multipart form overhead and other fields; a total limit of exactly 5 MiB is insufficient.
+- **External jobs provider:** account for Himalayas timeout, availability, rate limits, schema changes, and stale or withdrawn listings. The application does not persist or guarantee listings.
+- **Error handling:** current provider failures are mapped to 502 and AI failures to safe 502 responses, but production logging, retries, rate limits, and monitoring still need a deployment decision.
+- **Model consistency:** Mock Interview honors `OPENAI_MODEL`; CV Reviewer and Job-Fit Analysis use `gpt-4o-mini`. This is verified current behavior, not an accidental documentation assumption.
+
+## G. Handoff to Diogo
+
+1. Confirm the production frontend origin and update CORS in `backend/app.py` as part of deployment coordination.
+2. Provision the backend OpenAI secret and set the frontend public API origin in the chosen hosting platforms.
+3. Validate Himalayas behavior and request/upload limits in staging; mocked tests cannot replace that check.
+4. Choose runtime/process-manager settings and add deployment monitoring before presenting the application as hosted.
+
+## H. Git and scope status
+
+The branch is `docs/deployment-readiness`, based on the existing local integration merge. This continuation leaves only `README.md` and this audit report modified, unstaged, and uncommitted. No commit, push, additional merge, PR update, deployment, or collaborator message was performed.
