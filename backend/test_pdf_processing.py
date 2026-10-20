@@ -1,21 +1,16 @@
-
 from pathlib import Path
-from cv_reviewer import extract_cv_from_pdf
 
-# Location of a fictional PDF used for testing.
-pdf_path = Path("sample_cv.pdf")
+from backend.cv_reviewer import extract_cv_from_pdf
 
-# Read the PDF as binary data.
-pdf_bytes = pdf_path.read_bytes()
 
-# Extract and validate its text.
-result = extract_cv_from_pdf(pdf_bytes)
+def test_pdf_extraction():
+    # Locate the sample PDF next to this test file.
+    pdf_path = Path(__file__).parent / "sample_cv.pdf"
 
-# Display a short preview of the extracted content.
-print("Extracted CV text:")
-print(result[:500])
+    # Read and extract text from the PDF.
+    pdf_bytes = pdf_path.read_bytes()
+    result = extract_cv_from_pdf(pdf_bytes)
 
-# Check that meaningful content was extracted.
-assert len(result) > 0
-
-print("PDF extraction test passed!")
+    # Verify that meaningful text was extracted.
+    assert isinstance(result, str)
+    assert len(result.strip()) > 0

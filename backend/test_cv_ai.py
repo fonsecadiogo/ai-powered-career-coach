@@ -1,28 +1,33 @@
-
 from pathlib import Path
 
-from cv_reviewer import extract_cv_from_pdf, analyze_cv
+from backend.cv_reviewer import extract_cv_from_pdf, analyze_cv
 
-# Locate the fictional sample CV next to this test file.
-pdf_path = Path(__file__).parent / "sample_cv.pdf"
 
-# Read and extract text from the PDF.
-pdf_bytes = pdf_path.read_bytes()
-cv_text = extract_cv_from_pdf(pdf_bytes)
+def main():
+    # Locate the fictional sample CV next to this file.
+    pdf_path = Path(__file__).parent / "sample_cv.pdf"
 
-# Analyze the CV for our selected target role.
-review = analyze_cv(
-    cv_text=cv_text,
-    role="Junior AI Engineer",
-)
+    # Extract text from the PDF.
+    pdf_bytes = pdf_path.read_bytes()
+    cv_text = extract_cv_from_pdf(pdf_bytes)
 
-# Display the structured feedback.
-print(review.model_dump_json(indent=2))
+    # Run a real OpenAI analysis.
+    review = analyze_cv(
+        cv_text=cv_text,
+        role="Junior AI Engineer",
+    )
 
-# Verify the result follows our response schema.
-assert 0 <= review.score <= 100
-assert isinstance(review.strengths, list)
-assert isinstance(review.weaknesses, list)
-assert isinstance(review.suggestions, list)
+    # Display structured feedback.
+    print(review.model_dump_json(indent=2))
 
-print("OpenAI CV analysis test passed!")
+    # Validate the response schema.
+    assert 0 <= review.score <= 100
+    assert isinstance(review.strengths, list)
+    assert isinstance(review.weaknesses, list)
+    assert isinstance(review.suggestions, list)
+
+    print("OpenAI CV analysis test passed!")
+
+
+if __name__ == "__main__":
+    main()
