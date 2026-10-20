@@ -634,3 +634,132 @@
     padding: 16px;
   }
 }
+
+
+/* =========================================
+   CV REVIEWER — ATENA DESIGN INTEGRATION
+   Scoped styles to avoid affecting other modules.
+========================================= */
+
+/* Keep the CV Reviewer content aligned with the shared UI. */
+.cv-reviewer {
+  width: 100%;
+  color: var(--text);
+}
+
+/* Match the heading and introductory text. */
+.cv-reviewer h2 {
+  margin: 0 0 18px;
+  color: var(--text);
+}
+
+.cv-reviewer > p {
+  margin: 0 0 36px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* Stack form controls vertically with consistent spacing. */
+.cv-reviewer form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cv-reviewer form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* Display each label above its corresponding input. */
+.cv-reviewer label {
+  display: block;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Match the shape and spacing of Atena's form fields. */
+.cv-reviewer input[type="text"],
+.cv-reviewer input[type="file"],
+.cv-reviewer textarea {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid #d8e2f3;
+  border-radius: 14px;
+  background: #f8faff;
+  color: var(--text);
+  font: inherit;
+}
+
+.cv-reviewer textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* Highlight the active field for keyboard users. */
+.cv-reviewer input:focus-visible,
+.cv-reviewer textarea:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Match the primary blue action button. */
+.cv-reviewer button[type="submit"] {
+  align-self: flex-start;
+  padding: 15px 28px;
+  border: none;
+  border-radius: 14px;
+  background: var(--primary);
+  color: white;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cv-reviewer button[type="submit"]:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.cv-reviewer button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Keep validation errors clear and accessible. */
+.cv-reviewer .cv-error {
+  margin-top: 20px;
+  color: #b42318;
+  font-weight: 600;
+}
+
+/* Format the AI analysis as a separate result section. */
+.cv-reviewer .cv-results {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+
+.cv-reviewer .cv-results h3 {
+  margin-bottom: 18px;
+}
+
+.cv-reviewer .cv-results h4 {
+  margin: 26px 0 12px;
+}
+
+.cv-reviewer .cv-results ul {
+  padding: 20px 20px 20px 40px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #f8faff;
+  line-height: 1.7;
+}
+
+.cv-reviewer .cv-results li + li {
+  margin-top: 10px;
+}
