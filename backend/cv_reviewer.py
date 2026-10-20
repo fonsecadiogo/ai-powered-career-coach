@@ -158,9 +158,11 @@ def extract_cv_from_pdf(pdf_bytes: bytes) -> str:
 
     # Reuse our existing CV text validation function.
     return prepare_cv_text(full_text)
-# Locate ironhack-workspace/.env from the Career Coach backend.
-workspace_env = Path(__file__).resolve().parents[3] / ".env"
-load_dotenv(workspace_env)
+# Load an optional project-local file for development. Hosting providers normally
+# supply OPENAI_API_KEY through the process environment; load_dotenv does not
+# override an already supplied environment variable by default.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
 
 
 def analyze_cv(
