@@ -15,13 +15,13 @@ const modules = [
     id: "jobs",
     name: "Job Discovery",
     description: "Find opportunities",
-    available: false,
+    available: true,
   },
   {
     id: "job-fit",
     name: "Job-Fit Analysis",
     description: "Discover your skills gap",
-    available: false,
+    available: true,
   },
 ];
 

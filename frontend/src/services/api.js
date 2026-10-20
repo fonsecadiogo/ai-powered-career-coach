@@ -89,3 +89,58 @@ export async function reviewCV({
   // Return the score, strengths, weaknesses and suggestions.
   return data;
 }
+
+
+export async function searchJobs(query) {
+  const params = new URLSearchParams({
+    q: query.trim(),
+  });
+
+  const response = await fetch(
+    `${API_BASE_URL}/jobs/search?${params.toString()}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Unable to retrieve job opportunities.");
+  }
+
+  const data = await response.json();
+
+  return data;
+}
+
+
+export async function analyzeJobFit({
+  cvText = "",
+  cvFile = null,
+  jobDescription = "",
+}) {
+  const formData = new FormData();
+
+  // Send either a PDF file or pasted CV text.
+  if (cvFile) {
+    formData.append("cv_file", cvFile);
+  } else {
+    formData.append("cv_text", cvText.trim());
+  }
+
+  // The job description is mandatory.
+  formData.append("job_description", jobDescription.trim());
+
+  const response = await fetch(`${API_BASE_URL}/job-fit`, {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      typeof data.detail === "string"
+        ? data.detail
+        : "Unable to analyze job compatibility."
+    );
+  }
+
+  return data;
+}

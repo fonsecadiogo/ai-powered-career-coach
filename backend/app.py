@@ -5,14 +5,14 @@ from pydantic import BaseModel, Field
 from .interview import InterviewEngine, InterviewError
 from .interview_schemas import InterviewSession, InterviewEvaluation
 from .cv_reviewer import router as cv_router
-
-
+from .jobs import router as jobs_router
+from .job_fit import router as job_fit_router
 
 app = FastAPI(title="AI-Powered Career Coach")
 
-
 app.include_router(cv_router)
-
+app.include_router(jobs_router)
+app.include_router(job_fit_router)
 
 app.add_middleware(
     CORSMiddleware,
