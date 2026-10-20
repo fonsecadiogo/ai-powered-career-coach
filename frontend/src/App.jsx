@@ -5,6 +5,8 @@ import HeroSection from "./components/HeroSection";
 import ModeTabs from "./components/ModeTabs";
 import MockInterview from "./components/MockInterview";
 import CVReviewer from "./components/CVReviewer";
+import JobDiscovery from "./components/JobDiscovery";
+import JobFitAnalysis from "./components/JobFitAnalysis";
 
 import "./App.css";
 
@@ -23,13 +25,14 @@ function App() {
           onChange={setActiveModule}
         />
 
+
         <main className="app-main">
-          {activeModule === "interview" ? (
-            <MockInterview />
-          ) : (
-            <CVReviewer />
-          )}
+          {activeModule === "interview" && <MockInterview />}
+          {activeModule === "cv" && <CVReviewer />}
+          {activeModule === "jobs" && <JobDiscovery />}
+          {activeModule === "job-fit" && <JobFitAnalysis />}
         </main>
+
       </div>
 
       <footer className="app-footer">
