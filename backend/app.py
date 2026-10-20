@@ -3,9 +3,21 @@ from pydantic import BaseModel, Field
 
 from .interview import InterviewEngine, InterviewError
 from .interview_schemas import InterviewSession, InterviewEvaluation
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI(title="AI-Powered Career Coach")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+)
 
 interview_engine = InterviewEngine()
 
