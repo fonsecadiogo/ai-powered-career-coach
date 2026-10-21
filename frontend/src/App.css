@@ -496,7 +496,8 @@
 
 /* BUTTONS */
 
-.mock-interview button {
+.mock-interview form > button,
+.mock-interview > button {
   align-self: flex-start;
   margin-top: 15px;
   padding: 13px 25px;
@@ -510,12 +511,14 @@
   transition: 0.2s ease;
 }
 
-.mock-interview button:not(:disabled):hover {
+.mock-interview form > button:not(:disabled):hover,
+.mock-interview > button:not(:disabled):hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 25px rgba(88, 119, 237, 0.25);
 }
 
-.mock-interview button:disabled {
+.mock-interview form > button:disabled,
+.mock-interview > button:disabled {
   opacity: 0.55;
   box-shadow: none;
 }
@@ -627,7 +630,8 @@
     font-size: 23px;
   }
 
-  .mock-interview button {
+  .mock-interview form > button,
+  .mock-interview > button {
     width: 100%;
     align-self: stretch;
   }
@@ -1170,4 +1174,204 @@
   border-top: 1px solid #dfe7f5;
   font-size: 13px;
   color: #71809c;
+}
+
+/* ============================================================
+   SHARED DEMO SCENARIO SELECTOR
+   ============================================================ */
+
+.demo-scenarios {
+  margin: 24px 0 28px;
+  padding: 16px 18px;
+  border: 1px solid #dfe7f5;
+  border-radius: 16px;
+  background: rgba(248, 251, 255, 0.82);
+}
+
+.demo-scenarios__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.demo-scenario-button {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 9px 13px;
+  border: 1px solid #cbd8f5;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #4963a7;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.demo-scenario-button:hover:not(:disabled) {
+  border-color: #5877ed;
+  background: #eef2ff;
+  color: #2d4fc0;
+}
+
+.demo-scenario-button:focus-visible {
+  outline: 3px solid rgba(88, 119, 237, 0.28);
+  outline-offset: 2px;
+}
+
+.demo-scenario-button--selected {
+  border-color: #5877ed;
+  background: #e9eeff;
+  color: #2949b4;
+}
+
+.demo-scenario-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .demo-scenarios {
+    padding: 14px;
+  }
+
+  .demo-scenarios__options {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .demo-scenario-button {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   CV REVIEWER — PDF REMOVE BUTTON
+   ============================================================ */
+
+/* Keep the existing file input and remove button side by side. */
+.cv-reviewer .cv-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Preserve the existing dashed file-upload design. */
+.cv-reviewer .cv-upload-row input[type="file"] {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+/* Compact circular remove button. */
+.cv-reviewer .cv-upload-row .cv-remove-file {
+  display: inline-flex;
+  flex: 0 0 38px;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  padding: 0;
+  margin: 0;
+
+  border: 1px solid #cbd8f5;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #5877ed;
+
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Hover state. */
+.cv-reviewer .cv-upload-row .cv-remove-file:hover:not(:disabled) {
+  background: #e9eeff;
+  border-color: #5877ed;
+}
+
+/* Keyboard accessibility. */
+.cv-reviewer .cv-upload-row .cv-remove-file:focus-visible {
+  outline: 3px solid rgba(88, 119, 237, 0.3);
+  outline-offset: 3px;
+}
+
+/* Disabled state while analyzing. */
+.cv-reviewer .cv-upload-row .cv-remove-file:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   JOB-FIT ANALYSIS — PDF REMOVE BUTTON
+   ============================================================ */
+
+/* Arrange the PDF selector and remove button horizontally. */
+.job-fit .fit-upload-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Preserve Atena's existing dashed PDF upload field. */
+.job-fit .fit-upload-row input[type="file"] {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+/* Override the existing general form-button styles. */
+.job-fit .fit-upload-row .fit-remove-file {
+  display: inline-flex;
+  flex: 0 0 38px;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  padding: 0;
+  margin: 0;
+
+  border: 1px solid #cbd9ff;
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #5877ed;
+
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+
+  box-shadow: none;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Highlight the button when hovered. */
+.job-fit .fit-upload-row .fit-remove-file:hover:not(:disabled) {
+  background: #e9eeff;
+  border-color: #5877ed;
+}
+
+/* Show a focus outline for keyboard accessibility. */
+.job-fit .fit-upload-row .fit-remove-file:focus-visible {
+  outline: 3px solid rgba(88, 119, 237, 0.3);
+  outline-offset: 3px;
+}
+
+/* Disable removal during an AI request. */
+.job-fit .fit-upload-row .fit-remove-file:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
