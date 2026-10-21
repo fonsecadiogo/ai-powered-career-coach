@@ -17,24 +17,26 @@
 
 /* APPLICATION */
 
+
 .app {
   min-height: 100vh;
-  background:
-    radial-gradient(
-      ellipse at 85% 10%,
-      rgba(143, 217, 255, 0.24),
-      transparent 38%
+
+  background-image:
+    linear-gradient(
+      rgba(239, 246, 255, 0.55),
+      rgba(239, 246, 255, 0.68)
     ),
-    radial-gradient(
-      ellipse at 8% 42%,
-      rgba(189, 177, 255, 0.17),
-      transparent 38%
-    ),
-    #f6f9ff;
+    url("/digital-office.webp");
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
+
 .app-container {
-  max-width: 1240px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 42px 28px 70px;
 }
