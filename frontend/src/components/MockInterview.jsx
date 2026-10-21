@@ -4,10 +4,12 @@ import {
   submitInterviewAnswer,
   finishInterview,
 } from "../services/api";
+import DemoScenarioSelector from "./DemoScenarioSelector";
 
 export default function MockInterview() {
   const [role, setRole] = useState("");
   const [jobDescription, setJobDescription] = useState("");
+  const [selectedScenarioId, setSelectedScenarioId] = useState("");
   const [session, setSession] = useState(null);
   const [answer, setAnswer] = useState("");
   const [evaluation, setEvaluation] = useState(null);
@@ -20,6 +22,13 @@ export default function MockInterview() {
 
   const answeredCount =
     session?.turns?.filter((turn) => turn.answer !== null).length ?? 0;
+
+  function handleLoadDemo(scenario) {
+    setRole(scenario.role);
+    setJobDescription(scenario.jobDescription);
+    setSelectedScenarioId(scenario.id);
+    setError("");
+  }
 
   const handleStart = async (event) => {
     event.preventDefault();
@@ -94,7 +103,13 @@ export default function MockInterview() {
       {error && <p role="alert" className="error">{error}</p>}
 
       {!session && (
-        <form onSubmit={handleStart}>
+        <>
+          <DemoScenarioSelector
+            onSelect={handleLoadDemo}
+            disabled={loading}
+            selectedId={selectedScenarioId}
+          />
+          <form onSubmit={handleStart}>
           <label htmlFor="interview-role">Target Role</label>
           <input
             id="interview-role"
@@ -121,7 +136,8 @@ export default function MockInterview() {
           <button type="submit" disabled={loading}>
             {loading ? "Starting..." : "Start Interview"}
           </button>
-        </form>
+          </form>
+        </>
       )}
 
       {session && !evaluation && (
