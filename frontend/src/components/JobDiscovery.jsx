@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { searchJobs } from "../services/api";
+import DemoScenarioSelector from "./DemoScenarioSelector";
 
 export default function JobDiscovery() {
   const [query, setQuery] = useState("");
@@ -7,6 +8,13 @@ export default function JobDiscovery() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [searched, setSearched] = useState(false);
+  const [selectedScenarioId, setSelectedScenarioId] = useState("");
+
+  function handleLoadDemo(scenario) {
+    setQuery(scenario.jobSearchQuery);
+    setSelectedScenarioId(scenario.id);
+    setError("");
+  }
 
   async function handleSearch(event) {
     event.preventDefault();
@@ -42,6 +50,12 @@ export default function JobDiscovery() {
         Discover real remote job opportunities based on
         your career interests.
       </p>
+
+      <DemoScenarioSelector
+        onSelect={handleLoadDemo}
+        disabled={loading}
+        selectedId={selectedScenarioId}
+      />
 
       <form onSubmit={handleSearch} className="jobs-search-form">
         <label htmlFor="job-query">Job title or keywords</label>
