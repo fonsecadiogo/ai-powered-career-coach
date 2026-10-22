@@ -7,6 +7,11 @@ A React and FastAPI career-coaching MVP with four user-facing tools:
 - **Job Discovery** — live remote-job search through the Himalayas job-listings API.
 - **Job-Fit Analysis** — an OpenAI-generated compatibility estimate comparing a CV with a job description.
 
+This is a collaborative Ironhack AI Engineering bootcamp project. See
+[Team Project and Contributions](docs/TEAM_PROJECT_AND_CONTRIBUTIONS.md) for
+portfolio attribution and contribution guidance. The project is licensed
+under the [MIT License](LICENSE).
+
 The application does not store job listings or interview sessions, and no production deployment is configured in this repository.
 
 ## Architecture
